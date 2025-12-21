@@ -244,7 +244,7 @@ export default function App() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
-            <h1 className="font-bold text-gray-900 whitespace-nowrap">Chicko Chicken</h1>
+            <img src="/assets/icon.jpeg" alt="Chicko Chicken" className="h-8 w-auto" />
             
             {/* Search Bar */}
             <div className="flex-1 max-w-md relative">
