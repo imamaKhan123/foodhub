@@ -459,7 +459,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Chicken Tower Burger',
     description: 'Juicy double chicken patty and special sauce plus crispy fries and Drink',
     category: 'Burgers',
-    basePrice: 4.99,
+    basePrice: 5.99,
     image: '/assets/image5.png',
     sizes: [
       { name: 'Regular', price: 0 },
@@ -475,7 +475,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Chicken Fillet Burger Meal 1',
     description: 'Chicken fillet burger served with fries and a drink',
     category: 'Burger Deals',
-    basePrice: 5.99,
+    basePrice: 6.49,
     image: '/assets/image6.png',
     sizes: [
       { name: 'Regular', price: 0 },
@@ -489,7 +489,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Chicken Fillet Burger Meal 2',
     description:'Chicken fillet burger served with 1 piece of chicken,fries and a drink',
     category: 'Burger Deals',
-    basePrice: 7.49,
+    basePrice: 7.99,
     image: '/assets/meal2.png',
     sizes: [
       { name: 'Regular', price: 0 },
@@ -503,7 +503,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Chicken Strip Burger',
     description:  'Chicken strip burger with fries and a drink',
     category: 'Burgers',
-    basePrice: 5.49,
+    basePrice: 6.99,
     image: '/assets/meal3.png',
       sizes: [
       { name: 'Regular', price: 0 },
@@ -518,7 +518,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Chicken Fillet Burger Meal 3',
     description: 'Chicken fillet burger served with 2 piece of spicy chicken,fries and a drink',
      category: 'Burger Deals',
-    basePrice: 7.49,
+    basePrice: 7.99,
     image: '/assets/meal4.png',
     sizes: [
       { name: 'Regular', price: 0 },
@@ -535,7 +535,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'BBQ Chicken Wings',
     description: '5 pieces BBQ chicken wings',
     category: 'Grill Chicken deals',
-    basePrice:6.99,
+    basePrice: 3.49,
     image: 'https://www.loveandotherspices.com/wp-content/uploads/2023/06/air-fryer-bbq-chicken-wings-featured.jpg',
   },
    {
@@ -569,7 +569,7 @@ export const MENU_DATA: MenuItem[] = [
     description: 'Crispy spicy chicken wings',
     image: 'https://plus.unsplash.com/premium_photo-1683657860968-7474e7ea2d80?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Y2hpY2tlbiUyMHdpbmd8ZW58MHx8MHx8fDA%3D',
      category: 'Grill Chicken deals',
-    basePrice: 3.99
+    basePrice: 4.49
   },
   {
     id: '1706',
@@ -585,7 +585,7 @@ export const MENU_DATA: MenuItem[] = [
     description: 'Crispy spicy chicken wings',
     image:'https://images.unsplash.com/photo-1566918214014-a3b3e0132267?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     category: 'Grill Chicken deals',
-    basePrice: 4.49
+    basePrice: 5.49
   },
   {
     id: '1708',
@@ -651,8 +651,8 @@ export const MENU_DATA: MenuItem[] = [
     id: '1104',
     name: 'Peri Peri Quarter Chicken',
     description: 'Grilled peri peri quarter chicken',
-     image: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YnVyZ2VyJTIwYW5kJTIwZnJpZXN8ZW58MHx8MHx8fDA%3D',
-   
+     image: 'https://images.unsplash.com/photo-1712579733874-c3a79f0f9d12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxncmlsbGVkJTIwY2hpY2tlbnxlbnwxfHx8fDE3NjU4MjAyNTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+
     category: 'Peri Peri',
     basePrice: 3.99,
     addOns: [
@@ -747,7 +747,7 @@ export const MENU_DATA: MenuItem[] = [
     description: 'Chicken strips or 5 wings with rice and salad',
     category: 'Rice Box',
   image: 'https://images.unsplash.com/photo-1628521061262-19b5cdb7eee5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyaWNlJTIwYm93bHxlbnwxfHx8fDE3NjU4NDQ3NTl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    basePrice: 4.99,
+    basePrice: 5.49,
     addOns: [
       { name: 'Chicken Strips', price: 0 },
       { name: '5 Wings', price: 0 },
@@ -760,7 +760,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Wings Bucket',
     description:  '20 pieces of hot wings',
     category: 'Buckets',
-    basePrice: 8.99,
+    basePrice: 10.99,
     image: 'https://images.unsplash.com/photo-1670688866261-db6697858df8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlja2VuJTIwYnVja2V0fGVufDF8fHx8MTc2NTg5ODAwN3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
   
     addOns: [
