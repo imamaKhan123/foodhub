@@ -30,8 +30,17 @@ export function MenuBrowser({ onAddToCart, searchQuery = '' }: MenuBrowserProps)
       item.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
-
-  return (
+  // Group items by category for "All" view
+  const itemsByCategory: { [key: string]: MenuItem[] } = {};
+  if (selectedCategory === 'All') {
+    filteredItems.forEach(item => {
+      if (!itemsByCategory[item.category]) {
+        itemsByCategory[item.category] = [];
+      }
+      itemsByCategory[item.category].push(item);
+    });
+  }
+ return (
     <div>
       {/* Category Filter */}
       <div className="mb-8">
@@ -52,42 +61,91 @@ export function MenuBrowser({ onAddToCart, searchQuery = '' }: MenuBrowserProps)
         </div>
       </div>
 
-      {/* Menu Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredItems.map(item => (
-          <div
-            key={item.id}
-            className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
-            onClick={() => setSelectedItem(item)}
-          >
-            <div className="aspect-video overflow-hidden">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-1">{item.name}</h3>
-              <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-orange-500 font-semibold">
-                  £{item.basePrice.toFixed(2)}
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedItem(item);
-                  }}
-                  className="bg-orange-500 text-white px-4 py-1.5 rounded-lg hover:bg-orange-600 transition-colors"
-                >
-                  Add
-                </button>
+      {/* Menu Display */}
+      {selectedCategory === 'All' ? (
+        // Grouped by category view
+        <div className="space-y-8">
+          {CATEGORIES.filter(cat => cat !== 'All' && itemsByCategory[cat]?.length > 0).map(category => (
+            <div key={category}>
+              <h2 className="text-gray-900 text-xl font-semibold mb-6 pb-4 border-b-2 border-orange-500">
+                {category}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {itemsByCategory[category].map(item => (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
+                    onClick={() => setSelectedItem(item)}
+                  >
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900 mb-1">{item.name}</h3>
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-orange-500 font-semibold">
+                          ${item.basePrice.toFixed(2)}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedItem(item);
+                          }}
+                          className="bg-orange-500 text-white px-4 py-1.5 rounded-lg hover:bg-orange-600 transition-colors"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        // Regular grid view for specific categories
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredItems.map(item => (
+            <div
+              key={item.id}
+              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
+              onClick={() => setSelectedItem(item)}
+            >
+              <div className="aspect-video overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-1">{item.name}</h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-orange-500 font-semibold">
+                    ${item.basePrice.toFixed(2)}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedItem(item);
+                    }}
+                    className="bg-orange-500 text-white px-4 py-1.5 rounded-lg hover:bg-orange-600 transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Item Details Modal */}
       {selectedItem && (

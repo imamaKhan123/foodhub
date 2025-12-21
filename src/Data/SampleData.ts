@@ -30,8 +30,8 @@ export const MENU_DATA: MenuItem[] = [
     id: '203',
     name: 'Veggie Burger',
     description: 'Vegetarian burger patty with fresh salad',
-    image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dmVnZ2llJTIwYnVyZ2VyfGVufDB8fDB8fHww',
-    category: 'Burgers',
+    image: 'https://www.fooodlove.com/images/jcogs_img/cache/Veggie-Burger-Patties-08_-_28de80_-_6e998e32564657d98615fa3eb7a1d080799fbdd5.jpg',
+     category: 'Burgers',
     basePrice: 3.99,
     addOns: [
       { name: 'Cheese', price: 0.7 },
@@ -70,8 +70,7 @@ export const MENU_DATA: MenuItem[] = [
     id: '301',
     name: 'Crispy Chicken Wrap',
     description: 'Crispy fried chicken wrap with fresh salad',
-        image: 'https://plus.unsplash.com/premium_photo-1663850684986-b9d15f1de6bc?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8d3JhcHxlbnwwfHwwfHx8MA%3D%3D',
-         category: 'Wraps',
+        image: 'https://www.momables.com/wp-content/uploads/2024/03/Crispy-chicken-wrap_SQ-500x500.jpg',  category: 'Wraps',
     basePrice: 4.49,
     addOns: [
       { name: 'Cheese', price: 0.7 },
@@ -82,8 +81,7 @@ export const MENU_DATA: MenuItem[] = [
     id: '302',
     name: 'Grilled Chicken Wrap',
     description: 'Grilled chicken wrap with fresh salad',
-        image: 'https://plus.unsplash.com/premium_photo-1664478294917-c11274b9ce79?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c2FuZHdpY2glMjB3cmFwfGVufDB8fDB8fHww',
-    category: 'Wraps',
+        image: 'https://tastesbetterfromscratch.com/wp-content/uploads/2020/03/Buffalo-Chicken-Wrap-3.jpg', category: 'Wraps',
     basePrice: 5.49,
     addOns: [
       { name: 'Cheese', price: 0.7 },
@@ -94,8 +92,7 @@ export const MENU_DATA: MenuItem[] = [
     id: '303',
     name: 'Falafel Wrap',
     description: 'Crispy falafel wrap with salad and sauce',
-        image: 'https://images.unsplash.com/photo-1585238342107-49a3cdace47f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8d3JhcHN8ZW58MHx8MHx8fDA%3D',
-    category: 'Wraps',
+        image: 'https://www.liveeatlearn.com/wp-content/uploads/2025/03/sheet-pan-freezer-falafel-11-500x375.jpg', category: 'Wraps',
     basePrice: 4.99,
     addOns: [
       { name: 'Cheese', price: 0.7 },
@@ -460,8 +457,8 @@ export const MENU_DATA: MenuItem[] = [
    {
     id: '101',
     name: 'Chicken Tower Burger',
-    description: 'Juicy beef patty with lettuce, tomato, onions, and special sauce plus crispy fries and Drink',
-    category: 'Burger Deals',
+    description: 'Juicy double chicken patty and special sauce plus crispy fries and Drink',
+    category: 'Burgers',
     basePrice: 4.99,
     image: '/assets/image5.png',
     sizes: [
@@ -505,7 +502,7 @@ export const MENU_DATA: MenuItem[] = [
     id: '104',
     name: 'Chicken Strip Burger',
     description:  'Chicken strip burger with fries and a drink',
-    category: 'Burger Deals',
+    category: 'Burgers',
     basePrice: 5.49,
     image: '/assets/meal3.png',
       sizes: [
@@ -539,8 +536,7 @@ export const MENU_DATA: MenuItem[] = [
     description: '5 pieces BBQ chicken wings',
     category: 'Grill Chicken deals',
     basePrice:6.99,
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9Hi1Fez_6uLil1XAauq_zIYPY-u9itSsM3Q&s',
-    addOns: [{ name: 'No Sugar Drink', price: 0.5 }]
+    image: 'https://www.loveandotherspices.com/wp-content/uploads/2023/06/air-fryer-bbq-chicken-wings-featured.jpg',
   },
    {
     id: '1702',
@@ -549,7 +545,7 @@ export const MENU_DATA: MenuItem[] = [
     category: 'Grill Chicken deals',
     basePrice:3.99,
     image: 'https://images.unsplash.com/photo-1683701504046-3becdafbdf0c?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2hpY2tlbiUyMHN0cmlwc3xlbnwwfHwwfHx8MA%3D%3D',
-    addOns: [{ name: 'No Sugar Drink', price: 0.5 }]
+    addOns: [{ name: 'No Sugar Drink', price: 1.49 }]
   },
   {
     id: '1703',
