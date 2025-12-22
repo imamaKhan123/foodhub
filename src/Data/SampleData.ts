@@ -133,13 +133,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 10.49,
   image: '/assets/pizza1.png',
    sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -152,13 +150,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 11.49,
     image: '/assets/pizza2.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -171,13 +167,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 11.99,
     image:  '/assets/pizza3.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2},
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -190,13 +184,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 11.99,
     image: '/assets/pizza4.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -209,13 +201,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 11.99,
     image: '/assets/pizza5.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -228,13 +218,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 12.99,
     image: '/assets/pizza6.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -247,13 +235,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 12.99,
     image: '/assets/pizza7.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -266,13 +252,12 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 12.99,
     image: '/assets/pizza8.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+       { name: 'Regular 12"', price: 0 },
+
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -285,13 +270,11 @@ export const MENU_DATA: MenuItem[] = [
     basePrice: 12.99,
     image: '/assets/pizza9.png',
     sizes: [
-      { name: 'Small', price: 0 },
-      { name: 'Medium', price: 4 },
-      { name: 'Large', price: 7 }
+    { name: 'Regular 12"', price: 0 },
     ],
     addOns: [
       { name: 'Extra Cheese', price: 2 },
-      { name: 'Pepperoni', price: 3 },
+      { name: 'Pepperoni', price: 2 },
       { name: 'Mushrooms', price: 2 },
       { name: 'Olives', price: 1.5 }
     ]
@@ -346,11 +329,11 @@ export const MENU_DATA: MenuItem[] = [
     name: 'French Fries',
     description: 'Crispy golden fries with sea salt',
     category: 'Sides',
-    basePrice: 1.49,
+    basePrice: 1.79,
     image: 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcmVuY2glMjBmcmllc3xlbnwxfHx8fDE3NjU0NzUyMDl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
     sizes: [
       { name: 'Regular', price: 0 },
-      { name: 'Large', price: 0.5 }
+      { name: 'Large', price: 0.7 }
     ],
     addOns: [
       { name: 'Cheese Sauce', price: 1 },    ]
@@ -360,11 +343,11 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Peri Peri Fries',
     description: 'Spicy peri peri seasoned fries',
     category: 'Sides',
-    basePrice: 1.79,
+    basePrice: 2.49,
     image: 'https://cookingwithparita.com/wp-content/uploads/2022/10/image-of-baked-crispy-peri-peri-fries-recipe-2.jpg',
      sizes: [
       { name: 'Regular', price: 0 },
-      { name: 'Large', price: 0.7 }
+      { name: 'Large', price: 0.5 }
     ],
     addOns: [
       { name: 'Cheese Sauce', price: 1 },
@@ -374,7 +357,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Sweet Potato Fries',
     description:'Crispy sweet potato fries',
     category: 'Sides',
-    basePrice: 2.49,
+    basePrice: 3.99,
     image: 'https://simplehomeedit.com/wp-content/uploads/2025/02/Sweet-Potato-Fries-1.webp',
      sizes: [
       { name: 'Regular', price: 0 },
@@ -389,7 +372,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Onion Rings',
     description:  'Golden fried onion rings',
     category: 'Sides',
-    basePrice: 2.99,
+    basePrice: 3.99,
     image: 'https://houseofnasheats.com/wp-content/uploads/2023/03/Homemade-Onion-Rings-Square-1.jpg',
       sizes: [
       { name: 'Regular', price: 0 },
@@ -402,7 +385,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Mozzarella Sticks',
     description: '8 breaded mozzarella sticks',
     category: 'Sides',
-    basePrice: 3.49,
+    basePrice: 4.99,
     image: 'https://images.themodernproper.com/production/posts/2021/Homemade-Mozzarella-Sticks-9.jpeg?w=1200&h=1200&q=60&fm=jpg&fit=crop&dm=1638935116&s=5ffd210ac3bc61d43ed6cf3ef253bcbb',
      sizes: [
       { name: 'Regular', price: 0 },
@@ -415,7 +398,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Jalapeno Cream Cheese Bites',
     description: '6 jalapeno cream cheese bites',
     category: 'Sides',
-    basePrice: 3.99,
+    basePrice: 5.49,
     image: 'https://spicysouthernkitchen.com/wp-content/uploads/Fried-Jalapeno-Popper-Bites-9.jpg',
      sizes: [
       { name: 'Regular', price: 0 },
@@ -429,7 +412,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Corn on the Cob',
     description: 'Crispy Corn on the Cob',
     category: 'Sides',
-    basePrice: 1.29,
+    basePrice: 1.99,
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReWqz7Rdv0XsopePKoIsG7p6a3rW1RqPPqow&s',
        sizes: [
       { name: 'Regular', price: 0 },
@@ -443,7 +426,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'Coleslaw',
     description: 'Crispy Coleslaw',
     category: 'Sides',
-    basePrice: 1.79,
+    basePrice: 1.99,
     image: 'https://assets.bonappetit.com/photos/647f450e29083daa1eff589e/1:1/w_2970,h_2970,c_limit/20230524-SEO-RECIPES-BON-APP24155.jpg',
       sizes: [
       { name: 'Regular', price: 0 },
@@ -535,7 +518,7 @@ export const MENU_DATA: MenuItem[] = [
     name: 'BBQ Chicken Wings',
     description: '5 pieces BBQ chicken wings',
     category: 'Grill Chicken deals',
-    basePrice: 3.49,
+    basePrice: 4.49,
     image: 'https://www.loveandotherspices.com/wp-content/uploads/2023/06/air-fryer-bbq-chicken-wings-featured.jpg',
   },
    {
@@ -553,7 +536,7 @@ export const MENU_DATA: MenuItem[] = [
     description: 'Crispy spicy chicken wings',
     image: 'https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aG90JTIwY2hpY2tlbnxlbnwwfHwwfHx8MA%3D%3D',
     category: 'Grill Chicken deals',
-    basePrice: 2.49
+    basePrice: 3.49
   },
   {
     id: '1704',
@@ -748,11 +731,15 @@ export const MENU_DATA: MenuItem[] = [
     category: 'Rice Box',
   image: 'https://images.unsplash.com/photo-1628521061262-19b5cdb7eee5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyaWNlJTIwYm93bHxlbnwxfHx8fDE3NjU4NDQ3NTl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
     basePrice: 5.49,
-    addOns: [
-      { name: 'Chicken Strips', price: 0 },
-      { name: '5 Wings', price: 0 },
-      { name: 'BBQ Sauce', price: 0 }
-    ]
+  
+  },
+    {
+    id: '1202',
+    name: 'Only Spicy Rice',
+    description: 'Spicy rice and salad',
+    category: 'Rice Box',
+  image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7HoArOXSs_9uojO5-WhPE9MPOr5cpwJVAMA&s',   basePrice: 2.99,
+  
   },
       // 🍗 Bucket s
   {

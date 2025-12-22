@@ -1466,3 +1466,22 @@ html {
   inherits: false;
   initial-value: 1;
 }
+
+/* Responsive utilities */
+@media (min-width: 768px) {
+  .md\:flex {
+    display: flex;
+  }
+  .md\:hidden {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:flex {
+    display: flex;
+  }
+  .lg\:hidden {
+    display: none;
+  }
+}

@@ -3,7 +3,7 @@ import { MenuBrowser } from './components/MenuBrowser';
 import { Cart } from './components/Cart';
 import { OrderHistory } from './components/OrderHistory';
 import { Auth } from './components/Auth';
-import { ShoppingCart, History, Menu, Search, User, LogOut } from 'lucide-react';
+import { ShoppingCart, History, Menu, Search, User, LogOut, MoreHorizontal } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import { projectId, publicAnonKey } from './utils/supabase/info';
 
@@ -50,6 +50,7 @@ export default function App() {
   const [user, setUser] = useState<{ accessToken: string; name: string; email: string } | null>(null);
   const [showAuth, setShowAuth] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -244,48 +245,54 @@ export default function App() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
-            <img src="/assets/icon.jpeg" alt="Chicko Chicken" className="h-8 w-auto" />
+            <button onClick={() => setCurrentView('menu')} className="focus:outline-none">
+              <img src="/assets/icon.jpeg" alt="Chicko Chicken" className="h-8 w-16" />
+            </button>
             
-            {/* Search Bar */}
-            <div className="flex-1 max-w-md relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search menu items..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              />
-            </div>
+            {/* Desktop: Search Bar, Nav, Orders, Auth */}
+            <div className="hidden lg:flex items-center gap-4 flex-1">
+              {/* Search Bar */}
+              <div className="flex-1 max-w-md relative">
+                <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search menu items..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                />
+              </div>
 
-            <nav className="flex gap-1 sm:gap-2">
-              <button
-                onClick={() => setCurrentView('menu')}
-                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors ${
-                  currentView === 'menu'
-                    ? 'bg-orange-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <Menu className="w-5 h-5" />
-                <span className="hidden sm:inline">Menu</span>
-              </button>
-              <button
-                onClick={() => setCurrentView('cart')}
-                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors relative ${
-                  currentView === 'cart'
-                    ? 'bg-orange-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="hidden sm:inline">Cart</span>
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartItemCount}
-                  </span>
-                )}
-              </button>
+              <nav className="flex gap-1 sm:gap-2">
+                <button
+                  onClick={() => setCurrentView('menu')}
+                  className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors ${
+                    currentView === 'menu'
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Menu className="w-5 h-5" />
+                  <span className="hidden sm:inline">Menu</span>
+                </button>
+                <button
+                  onClick={() => setCurrentView('cart')}
+                  className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors relative ${
+                    currentView === 'cart'
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="hidden sm:inline">Cart</span>
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </button>
+              </nav>
+
               <button
                 onClick={() => setCurrentView('history')}
                 className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors ${
@@ -297,35 +304,132 @@ export default function App() {
                 <History className="w-5 h-5" />
                 <span className="hidden sm:inline">Orders</span>
               </button>
-            </nav>
 
-            {/* User Authentication */}
-            {user ? (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <User className="w-5 h-5 text-gray-700" />
-                  <span className="hidden sm:inline text-gray-700">{user.name}</span>
+              {/* User Authentication */}
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <User className="w-5 h-5 text-gray-700" />
+                    <span className="hidden sm:inline text-gray-700">{user.name}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span className="hidden sm:inline">Logout</span>
+                  </button>
                 </div>
+              ) : (
                 <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  onClick={() => setShowAuth(true)}
+                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors bg-orange-500 text-white hover:bg-orange-600"
                 >
-                  <LogOut className="w-5 h-5" />
-                  <span className="hidden sm:inline">Logout</span>
+                  <User className="w-5 h-5" />
+                  <span className="hidden sm:inline">Sign In</span>
                 </button>
-              </div>
-            ) : (
+              )}
+            </div>
+
+            {/* Mobile: Nav (Cart), Three dots */}
+            <div className="lg:hidden flex items-center gap-2">
+              <nav className="flex gap-1">
+                <button
+                  onClick={() => setCurrentView('cart')}
+                  className={`flex items-center gap-1 px-2 py-2 rounded-lg transition-colors relative ${
+                    currentView === 'cart'
+                      ? 'bg-orange-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </button>
+              </nav>
               <button
-                onClick={() => setShowAuth(true)}
-                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-colors bg-orange-500 text-white hover:bg-orange-600"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
               >
-                <User className="w-5 h-5" />
-                <span className="hidden sm:inline">Sign In</span>
+                <MoreHorizontal className="w-6 h-6" />
               </button>
-            )}
+            </div>
           </div>
         </div>
       </header>
+
+      {/* Mobile Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white shadow-lg border-t p-4">
+          {/* Search Bar */}
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search menu items..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Menu */}
+          <button
+            onClick={() => { setCurrentView('menu'); setIsMobileMenuOpen(false); }}
+            className={`flex items-center gap-2 w-full px-4 py-2 rounded-lg transition-colors mb-4 ${
+              currentView === 'menu'
+                ? 'bg-orange-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <Menu className="w-5 h-5" />
+            Menu
+          </button>
+
+          {/* Orders */}
+          <button
+            onClick={() => { setCurrentView('history'); setIsMobileMenuOpen(false); }}
+            className={`flex items-center gap-2 w-full px-4 py-2 rounded-lg transition-colors mb-4 ${
+              currentView === 'history'
+                ? 'bg-orange-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <History className="w-5 h-5" />
+            Orders
+          </button>
+
+          {/* User Authentication */}
+          {user ? (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <User className="w-5 h-5 text-gray-700" />
+                <span className="text-gray-700">{user.name}</span>
+              </div>
+              <button
+                onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                <LogOut className="w-5 h-5" />
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => { setShowAuth(true); setIsMobileMenuOpen(false); }}
+              className="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition-colors bg-orange-500 text-white hover:bg-orange-600"
+            >
+              <User className="w-5 h-5" />
+              Sign In
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Auth Modal */}
       {showAuth && (

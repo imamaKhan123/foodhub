@@ -89,7 +89,7 @@ export function MenuBrowser({ onAddToCart, searchQuery = '' }: MenuBrowserProps)
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-orange-500 font-semibold">
-                          ${item.basePrice.toFixed(2)}
+                          £{item.basePrice.toFixed(2)}
                         </span>
                         <button
                           onClick={(e) => {
@@ -129,7 +129,7 @@ export function MenuBrowser({ onAddToCart, searchQuery = '' }: MenuBrowserProps)
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-orange-500 font-semibold">
-                    ${item.basePrice.toFixed(2)}
+                    £{item.basePrice.toFixed(2)}
                   </span>
                   <button
                     onClick={(e) => {

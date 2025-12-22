@@ -18,6 +18,7 @@ export function Auth({ onClose, onAuthSuccess }: AuthProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +36,7 @@ export function Auth({ onClose, onAuthSuccess }: AuthProps) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${publicAnonKey}`
           },
-          body: JSON.stringify({ email, password, name })
+          body: JSON.stringify({ email, password, name, phone })
         });
 
         const signupData = await signupResponse.json();
@@ -103,17 +104,31 @@ export function Auth({ onClose, onAuthSuccess }: AuthProps) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === 'signup' && (
-            <div>
-              <label className="block text-gray-700 mb-2">Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                placeholder="Your name"
-              />
-            </div>
+            <>
+              <div>
+                <label className="block text-gray-700 mb-2">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  placeholder="Your name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  placeholder="Your phone number"
+                />
+              </div>
+            </>
           )}
 
           <div>

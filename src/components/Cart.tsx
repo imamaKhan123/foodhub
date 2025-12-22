@@ -11,7 +11,9 @@ type CartProps = {
 export function Cart({ items, onUpdateItem, onRemoveItem, onPlaceOrder }: CartProps) {
   const subtotal = items.reduce((sum, item) => sum + item.totalPrice, 0);
   const tax = subtotal * 0.08; // 8% tax
-  const total = subtotal + tax;
+  //const total = subtotal + tax;
+  const total = subtotal ;
+
 
   if (items.length === 0) {
     return (
@@ -104,10 +106,10 @@ export function Cart({ items, onUpdateItem, onRemoveItem, onPlaceOrder }: CartPr
             <span>Subtotal</span>
             <span>£{subtotal.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between text-gray-600">
+          {/* <div className="flex justify-between text-gray-600">
             <span>Tax (8%)</span>
             <span>£{tax.toFixed(2)}</span>
-          </div>
+          </div> */}
           <div className="border-t pt-2 flex justify-between font-semibold text-lg">
             <span>Total</span>
             <span className="text-orange-500">£{total.toFixed(2)}</span>
