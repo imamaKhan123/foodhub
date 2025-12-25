@@ -1,34 +1,30 @@
+/// <reference types="vite/client" />
+
 import { useState, useEffect } from 'react';
+import { startSignalRConnection, subscribeNewOrder, subscribeOrderUpdated, unsubscribeNewOrder, unsubscribeOrderUpdated, stopSignalRConnection } from './utils/signalr';
 import { MenuBrowser } from './components/MenuBrowser';
 import { Cart } from './components/Cart';
 import { OrderHistory } from './components/OrderHistory';
 import { Auth } from './components/Auth';
 import { ShoppingCart, History, Menu, Search, User, LogOut, MoreHorizontal } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
-import { projectId, publicAnonKey } from './utils/supabase/info';
-
-const supabase = createClient(
-  `https://${projectId}.supabase.co`,
-  publicAnonKey
-);
 
 export type MenuItem = {
-  id: string;
+  id: number;
   name: string;
   description: string;
   category: string;
   basePrice: number;
   image: string;
   sizes?: { name: string; price: number }[];
-  addOns?: { name: string; price: number }[];
+  availableAddOns?: { id : number ;name: string; price: number }[];
 };
 
 export type CartItem = {
-  id: string;
+  id: number;
   menuItem: MenuItem;
   size?: string;
   quantity: number;
-  addOns: string[];
+  addOns: { id: number; name: string; price: number }[];
   totalPrice: number;
 };
 
@@ -51,48 +47,49 @@ export default function App() {
   const [showAuth, setShowAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+const [categories, setCategories] = useState<string[]>(['All']);
   // Check for existing session on mount
   useEffect(() => {
-    const checkSession = async () => {
+    const checkStoredAuth = () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          setUser({
-            accessToken: session.access_token,
-            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
-            email: session.user.email || ''
-          });
+        const storedAuth = localStorage.getItem('auth');
+        if (storedAuth) {
+          const authData = JSON.parse(storedAuth);
+          setUser(authData);
         }
       } catch (error) {
-        console.error('Error checking session:', error);
+        console.error('Error loading stored auth:', error);
+        localStorage.removeItem('auth');
       } finally {
         setLoading(false);
       }
     };
 
-    checkSession();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
-          setUser({
-            accessToken: session.access_token,
-            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
-            email: session.user.email || ''
-          });
-          setShowAuth(false);
-        } else if (event === 'SIGNED_OUT') {
-          setUser(null);
-          setOrders([]);
-        }
+    checkStoredAuth();
+  }, []);
+    useEffect(() => {
+    async function fetchMenu() {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/Menu`);
+        const data: MenuItem[] = await res.json();
+        console.log('Fetched menu data:', data);
+        setMenuItems(data);
+  
+        // Build categories dynamically
+        const uniqueCategories = Array.from(
+          new Set(data.map(item => item.category))
+        );
+  
+        setCategories(['All', ...uniqueCategories]);
+      } catch (err) {
+        console.error('Failed to fetch menu', err);
+      } finally {
+        setLoading(false);
       }
-    );
-
-    return () => {
-      subscription?.unsubscribe();
-    };
+    }
+  
+    fetchMenu();
   }, []);
 
   // Fetch orders when user logs in
@@ -102,115 +99,182 @@ export default function App() {
     }
   }, [user?.accessToken]);
 
-  const fetchOrders = async () => {
-    if (!user?.accessToken) return;
+  // Setup SignalR realtime subscriptions when user is logged in
+  useEffect(() => {
+    let mounted = true;
 
-    try {
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-3ff7222b/orders`, {
-        headers: {
-          'Authorization': `Bearer ${user.accessToken}`
+    const onNewOrder = (payload: any) => {
+      // payload expected to contain the new order under `data` or as the object itself
+      const newOrder = payload?.data ?? payload;
+        console.debug('SignalR onNewOrder payload:', payload);
+        if (!newOrder || !newOrder.id) return;
+
+      // Normalize date fields if the server sends ISO strings
+      const parsedOrder = {
+        ...newOrder,
+        createdAt: newOrder.createdAt ? new Date(newOrder.createdAt) : new Date(),
+        updatedAt: newOrder.updatedAt ? new Date(newOrder.updatedAt) : new Date(),
+      };
+
+      setOrders(prev => [parsedOrder, ...prev]);
+    };
+
+    const onOrderUpdated = (payload: any) => {
+      console.log('Received order update via SignalR:', payload);
+      console.debug('SignalR onOrderUpdated payload:', payload);
+      // Server sends the complete order object on updates. Replace local order with server copy.
+      const updated = payload?.data ?? payload;
+      if (!updated || !updated.id) return;
+
+      const parsedOrder = {
+        ...updated,
+        createdAt: updated.createdAt ? new Date(updated.createdAt) : new Date(),
+        updatedAt: updated.updatedAt ? new Date(updated.updatedAt) : new Date(),
+      };
+
+      setOrders(prev => {
+        const exists = prev.some(o => o.id === parsedOrder.id);
+        if (exists) {
+          return prev.map(o => (o.id === parsedOrder.id ? parsedOrder : o));
         }
+        // If order wasn't present locally, add it to the front
+        return [parsedOrder, ...prev];
       });
+    };
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Fetched orders from backend:', data.orders);
-        const parsedOrders = data.orders.map((order: any) => ({
-          ...order,
-          createdAt: new Date(order.createdAt),
-          updatedAt: new Date(order.updatedAt)
-        }));
-        setOrders(parsedOrders);
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to fetch orders:', errorText);
+    async function initRealtime() {
+      try {
+        await startSignalRConnection(undefined, user?.accessToken);
+        // Subscribe both for new orders and updates
+        // onNewOrder used to append freshly created orders
+        // onOrderUpdated replaces a matching order with server copy
+        subscribeNewOrder(onNewOrder);
+        subscribeOrderUpdated(onOrderUpdated);
+      } catch (err) {
+        console.warn('Failed to start SignalR connection', err);
       }
-    } catch (error) {
-      console.error('Error fetching orders:', error);
     }
-  };
 
-  const handleAuthSuccess = (accessToken: string, userName: string) => {
-    // User state will be set by onAuthStateChange listener
+    if (user?.accessToken && mounted) {
+      initRealtime();
+    }
+
+    return () => {
+      mounted = false;
+      // Unsubscribe handlers; we keep connection running so other pages/components may reuse it.
+      unsubscribeNewOrder(onNewOrder);
+      unsubscribeOrderUpdated(onOrderUpdated);
+      // Optionally stop connection when no user, but keep it for dev convenience.
+      // stopSignalRConnection();
+    };
+  }, [user?.accessToken]);
+
+const fetchOrders = async () => {
+  if (!user?.accessToken) return;
+
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders/history`, {
+      headers: { 'Authorization': `Bearer ${user.accessToken}` }
+    });
+
+    if (!response.ok) {
+      // Backend now returns JSON error
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to fetch menu');
+    }
+
+    const data = await response.json();
+    console.log('Fetched Order History data:', data);
+    setOrders(data.data)// or map to your Order type if needed
+  } catch (error: any) {
+    console.error('Error fetching orders:', error.message);
+    alert(`Error fetching menu: ${error.message}`);
+  }
+};
+
+
+  const handleAuthSuccess = (accessToken: string, userName: string, email: string) => {
+    const userData = { accessToken, name: userName, email };
+    setUser(userData);
+    localStorage.setItem('auth', JSON.stringify(userData));
     setShowAuth(false);
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    setUser(null);
+    setOrders([]);
+    localStorage.removeItem('auth');
   };
 
   const addToCart = (item: CartItem) => {
-    setCart(prev => [...prev, { ...item, id: Date.now().toString() }]);
+    setCart(prev => [...prev, { ...item, id: Date.now() }]);
   };
 
   const updateCartItem = (id: string, updates: Partial<CartItem>) => {
-    setCart(prev => prev.map(item => item.id === id ? { ...item, ...updates } : item));
+    setCart(prev => prev.map(item => item.id.toString() === id ? { ...item, ...updates } : item));
   };
 
   const removeFromCart = (id: string) => {
-    setCart(prev => prev.filter(item => item.id !== id));
+    setCart(prev => prev.filter(item => item.id.toString() !== id));
   };
 
-  const placeOrder = async () => {
-    if (cart.length === 0) return;
+const placeOrder = async () => {
+  if (cart.length === 0) return;
 
-    // Check if user is logged in
-    if (!user?.accessToken) {
-      setShowAuth(true);
-      return;
-    }
+  if (!user?.accessToken) {
+    setShowAuth(true);
+    return;
+  }
 
-    const newOrder: Order = {
-      id: '', // Will be assigned by server
-      items: cart,
-      totalAmount: cart.reduce((sum, item) => sum + item.totalPrice, 0),
-      deliveryMethod: 'pickup',
-      status: 'pending',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+  // Map cart items to backend DTO
+  const itemsDTO = cart.map(item => ({
+    menuItemId: Number(item.menuItem.id),       // convert string ID to number
+    quantity: item.quantity,
+    size: item.size || '',
+    AddOns: item.addOns // convert add-on IDs to numbers
+  }));
 
-    try {
-      console.log('Placing order:', newOrder);
-      
-      // Save order to backend
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-3ff7222b/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.accessToken}`
-        },
-        body: JSON.stringify({
-          ...newOrder,
-          createdAt: newOrder.createdAt.toISOString(),
-          updatedAt: newOrder.updatedAt.toISOString()
-        })
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Server error:', errorText);
-        throw new Error('Failed to save order');
-      }
-
-      const data = await response.json();
-      console.log('Order saved successfully:', data);
-      
-      const savedOrder = { ...newOrder, id: data.orderId };
-
-      setOrders(prev => [savedOrder, ...prev]);
-      setCart([]);
-      setCurrentView('history');
-
-      // Simulate order status progression
-      setTimeout(() => updateOrderStatus(savedOrder.id, 'preparing'), 3000);
-      setTimeout(() => updateOrderStatus(savedOrder.id, 'ready'), 8000);
-      setTimeout(() => updateOrderStatus(savedOrder.id, 'completed'), 15000);
-    } catch (error) {
-      console.error('Error placing order:', error);
-      alert('Failed to place order. Please try again.');
-    }
+  const newOrderDTO = {
+    items: itemsDTO,
+    deliveryMethod: 'pickup' // or whatever the user selected
   };
+
+  try {
+    console.log('Placing order:', newOrderDTO);
+
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.accessToken}`
+      },
+      body: JSON.stringify(newOrderDTO)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error('Failed to save order');
+    }
+
+    const data = await response.json();
+    console.log('Order saved successfully:', data);
+
+    // Save locally for UI
+    setOrders(prev => [data.data, ...prev]); // data.data should be the returned OrderDTO
+    setCart([]);
+    setCurrentView('history');
+
+    // Simulate order status progression
+    setTimeout(() => updateOrderStatus(data.data.id, 'preparing'), 5000);
+    // setTimeout(() => updateOrderStatus(data.data.id, 'ready'), 8000);
+    // setTimeout(() => updateOrderStatus(data.data.id, 'completed'), 15000);
+  } catch (error) {
+    console.error('Error placing order:', error);
+    alert('Failed to place order. Please try again.');
+  }
+};
+
 
   const updateOrderStatus = async (orderId: string, status: Order['status']) => {
     // Update locally first
@@ -223,7 +287,7 @@ export default function App() {
     // Update on server if user is logged in
     if (user?.accessToken) {
       try {
-        await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-3ff7222b/orders/${orderId}`, {
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -441,7 +505,7 @@ export default function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {currentView === 'menu' && <MenuBrowser onAddToCart={addToCart} searchQuery={searchQuery} />}
+        {currentView === 'menu' && <MenuBrowser menuItems={menuItems} categories={categories}  onAddToCart={addToCart} searchQuery={searchQuery} />}
         {currentView === 'cart' && (
           <Cart
             items={cart}

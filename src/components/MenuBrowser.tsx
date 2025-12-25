@@ -1,26 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import { MenuItem } from '../App';
 import { ItemDetailsModal } from './ItemDetailsModal';
 
-import { MENU_DATA, CATEGORIES } from '../Data/SampleData';
+import { CATEGORIES } from '../Data/SampleData';
 
 
 
 
 type MenuBrowserProps = {
+  menuItems: MenuItem[];
+  categories: string[];
   onAddToCart: (item: any) => void;
   searchQuery?: string;
 };
 
-export function MenuBrowser({ onAddToCart, searchQuery = '' }: MenuBrowserProps) {
+export function MenuBrowser({ menuItems, categories,  onAddToCart, searchQuery = '' }: MenuBrowserProps) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+
+const [loading, setLoading] = useState(true);
+
+
+
 
   // Filter by category first
   let filteredItems =
     selectedCategory === 'All'
-      ? MENU_DATA
-      : MENU_DATA.filter(item => item.category === selectedCategory);
+      ? menuItems
+      : menuItems.filter(item => item.category === selectedCategory);
 
   // Then filter by search query
   if (searchQuery.trim()) {

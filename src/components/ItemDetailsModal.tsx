@@ -10,14 +10,14 @@ type ItemDetailsModalProps = {
 
 export function ItemDetailsModal({ item, onClose, onAddToCart }: ItemDetailsModalProps) {
   const [selectedSize, setSelectedSize] = useState(item.sizes?.[0]?.name || '');
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+  const [selectedAddOns, setSelectedAddOns] = useState<{id: number; name: string; price: number }[]>([]);
   const [quantity, setQuantity] = useState(1);
 
-  const toggleAddOn = (addOnName: string) => {
+  const toggleAddOn = (addOn: { id: number; name: string; price: number }) => {
     setSelectedAddOns(prev =>
-      prev.includes(addOnName)
-        ? prev.filter(name => name !== addOnName)
-        : [...prev, addOnName]
+      prev.some(a => a.id === addOn.id)
+        ? prev.filter(a => a.id !== addOn.id)
+        : [...prev, addOn]
     );
   };
 
@@ -31,19 +31,16 @@ export function ItemDetailsModal({ item, onClose, onAddToCart }: ItemDetailsModa
     }
 
     // Add add-ons price
-    if (item.addOns) {
-      selectedAddOns.forEach(addOnName => {
-        const addOn = item.addOns?.find(a => a.name === addOnName);
-        if (addOn) total += addOn.price;
-      });
-    }
+    selectedAddOns.forEach(addOn => {
+      total += addOn.price;
+    });
 
     return total * quantity;
   };
 
   const handleAddToCart = () => {
     const cartItem: CartItem = {
-      id: '', // Will be set in App
+      id: 0, // Will be set in App
       menuItem: item,
       size: selectedSize,
       quantity,
@@ -113,11 +110,11 @@ export function ItemDetailsModal({ item, onClose, onAddToCart }: ItemDetailsModa
           )}
 
           {/* Add-ons */}
-          {item.addOns && item.addOns.length > 0 && (
+          {item.availableAddOns && item.availableAddOns.length > 0 && (
             <div>
               <h3 className="font-semibold mb-3">Add-ons (Optional)</h3>
               <div className="space-y-2">
-                {item.addOns.map(addOn => (
+                {item.availableAddOns.map(addOn => (
                   <label
                     key={addOn.name}
                     className="flex items-center justify-between p-3 rounded-lg border-2 cursor-pointer transition-colors hover:border-gray-300"
@@ -125,8 +122,8 @@ export function ItemDetailsModal({ item, onClose, onAddToCart }: ItemDetailsModa
                     <div className="flex items-center gap-3">
                       <input
                         type="checkbox"
-                        checked={selectedAddOns.includes(addOn.name)}
-                        onChange={() => toggleAddOn(addOn.name)}
+                        checked={selectedAddOns.includes(addOn)}
+                        onChange={() => toggleAddOn(addOn)}
                         className="w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
                       />
                       <span>{addOn.name}</span>

@@ -1,16 +1,11 @@
+/// <reference types="vite/client" />
+
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
-
-const supabase = createClient(
-  `https://${projectId}.supabase.co`,
-  publicAnonKey
-);
 
 type AuthProps = {
   onClose: () => void;
-  onAuthSuccess: (accessToken: string, userName: string) => void;
+  onAuthSuccess: (accessToken: string, userName: string, email: string) => void;
 };
 
 export function Auth({ onClose, onAuthSuccess }: AuthProps) {
@@ -30,48 +25,58 @@ export function Auth({ onClose, onAuthSuccess }: AuthProps) {
     try {
       if (mode === 'signup') {
         // Sign up
-        const signupResponse = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-3ff7222b/signup`, {
+        const signupResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/Auth/register`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ email, password, name, phone })
         });
-
+        console.log('Signup request body:', { email, password, name, phone });
+        console.log('Signup response:', signupResponse);
         const signupData = await signupResponse.json();
 
         if (!signupResponse.ok) {
-          throw new Error(signupData.error || 'Failed to sign up');
+          throw new Error(signupData.message || 'Failed to sign up');
         }
 
         // After successful signup, automatically log in
-        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-          email,
-          password
+        const loginResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/Auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
         });
 
-        if (loginError) {
-          throw new Error(loginError.message);
+        const loginData = await loginResponse.json();
+        console.log('Login after signup data:', loginData);
+        if (!loginResponse.ok) {
+          throw new Error(loginData.message || 'Failed to log in after signup');
         }
 
-        if (loginData.session) {
-          onAuthSuccess(loginData.session.access_token, name);
+        if (loginData.data.token.result) {
+          onAuthSuccess(loginData.data.token.result, name, email);
         }
       } else {
         // Login
-        const { data, error: loginError } = await supabase.auth.signInWithPassword({
-          email,
-          password
+        const loginResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/Auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
         });
 
-        if (loginError) {
-          throw new Error(loginError.message);
+        const loginData = await loginResponse.json();
+        console.log('Login data:', loginData.data.token.result);
+        if (!loginData.success) {
+          throw new Error(loginData.message || 'Failed to log in');
         }
 
-        if (data.session) {
-          const userName = data.user.user_metadata?.name || email.split('@')[0];
-          onAuthSuccess(data.session.access_token, userName);
+        if (loginData.data.token.result) {
+          const userName = loginData.data.user.fullName || email.split('@')[0];
+          onAuthSuccess(loginData.data.token.result, userName, email);
         }
       }
     } catch (err: any) {

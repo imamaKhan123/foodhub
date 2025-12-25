@@ -50,7 +50,7 @@ export function Cart({ items, onUpdateItem, onRemoveItem, onPlaceOrder }: CartPr
               
               {item.addOns.length > 0 && (
                 <p className="text-sm text-gray-600">
-                  Add-ons: {item.addOns.join(', ')}
+                  Add-ons: {item.addOns.map(addon => `${addon.name} (+£${addon.price.toFixed(2)})`).join(', ')}
                 </p>
               )}
 
@@ -59,7 +59,7 @@ export function Cart({ items, onUpdateItem, onRemoveItem, onPlaceOrder }: CartPr
                   onClick={() => {
                     const newQuantity = Math.max(1, item.quantity - 1);
                     const newTotalPrice = (item.totalPrice / item.quantity) * newQuantity;
-                    onUpdateItem(item.id, { quantity: newQuantity, totalPrice: newTotalPrice });
+                    onUpdateItem(item.id.toString(), { quantity: newQuantity, totalPrice: newTotalPrice });
                   }}
                   className="p-1 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
                 >
@@ -72,7 +72,7 @@ export function Cart({ items, onUpdateItem, onRemoveItem, onPlaceOrder }: CartPr
                   onClick={() => {
                     const newQuantity = item.quantity + 1;
                     const newTotalPrice = (item.totalPrice / item.quantity) * newQuantity;
-                    onUpdateItem(item.id, { quantity: newQuantity, totalPrice: newTotalPrice });
+                    onUpdateItem(item.id.toString(), { quantity: newQuantity, totalPrice: newTotalPrice });
                   }}
                   className="p-1 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
                 >
@@ -83,7 +83,7 @@ export function Cart({ items, onUpdateItem, onRemoveItem, onPlaceOrder }: CartPr
 
             <div className="flex flex-col items-end justify-between">
               <button
-                onClick={() => onRemoveItem(item.id)}
+                onClick={() => onRemoveItem(item.id.toString())}
                 className="p-2 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
               >
                 <Trash2 className="w-5 h-5" />

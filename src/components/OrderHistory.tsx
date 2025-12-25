@@ -50,8 +50,11 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
       <div className="space-y-6">
         {orders.map(order => {
           const statusConfig = STATUS_CONFIG[order.status];
-          const StatusIcon = statusConfig.icon;
-
+         
+if (!statusConfig) {
+  return null; // or fallback UI
+}
+ const StatusIcon = statusConfig.icon;
           return (
             <div key={order.id} className="bg-white rounded-lg shadow-sm p-6">
               {/* Order Header */}
